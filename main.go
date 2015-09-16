@@ -56,7 +56,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	var port = flag.Int("port", 8080, "port to serve on.")
+	var addr = flag.String("addr", "localhost:8080", "address to serve on.")
 	var enableGit = flag.Bool("git", true, "serve git repo (if present).")
 	var gitPath = flag.String("git-path", "/usr/bin/git", "path to git binary.")
 
@@ -91,6 +91,6 @@ func main() {
 			EventHandler: func(e githttp.Event) {},
 		}
 	}
-	fmt.Printf("Serving %s on :%d\n", rootPath, *port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), http.HandlerFunc(Handle)))
+	fmt.Printf("Serving %s on %s\n", rootPath, *addr)
+	log.Fatal(http.ListenAndServe(*addr, http.HandlerFunc(Handle)))
 }
