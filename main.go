@@ -57,7 +57,6 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	var addr = flag.String("addr", "localhost:8080", "address to serve on.")
-	var enableGit = flag.Bool("git", true, "serve git repo (if present).")
 	var gitPath = flag.String("git-path", "/usr/bin/git", "path to git binary.")
 
 	flag.Parse()
@@ -70,11 +69,9 @@ func main() {
 
 	rootPath, _ := filepath.Abs(rootPath)
 
-	if *enableGit {
-		stat, err := os.Stat(filepath.Join(rootPath, ".git"))
-		if err == nil && stat.IsDir() {
-			hasGitDir = true
-		}
+	stat, err := os.Stat(filepath.Join(rootPath, ".git"))
+	if err == nil && stat.IsDir() {
+		hasGitDir = true
 	}
 
 	baseName = filepath.Base(rootPath)
