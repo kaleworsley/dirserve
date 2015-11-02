@@ -18,6 +18,8 @@ var (
 	rootPath       string
 	baseName       string
 	psudoGitPrefix string
+	addr           string
+	gitPath        string
 
 	realGitPrefix = "/.git"
 	hasGitDir     = false
@@ -55,10 +57,12 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, css)
 }
 
-func main() {
-	var addr = flag.String("addr", "localhost:8080", "address to serve on.")
-	var gitPath = flag.String("git-path", "/usr/bin/git", "path to git binary.")
+func init() {
+	flag.StringVar(&addr, "addr", "localhost:8080", "address to serve on.")
+	flag.StringVar(&gitPath, "git-path", "/usr/bin/git", "path to git binary.")
+}
 
+func main() {
 	flag.Parse()
 
 	if len(flag.Args()) == 0 {
@@ -82,12 +86,12 @@ func main() {
 		psudoGitPrefix = fmt.Sprintf("/%s.git", baseName)
 		gitHandler = &githttp.GitHttp{
 			ProjectRoot:  rootPath,
-			GitBinPath:   *gitPath,
+			GitBinPath:   gitPath,
 			UploadPack:   true,
 			ReceivePack:  true,
 			EventHandler: func(e githttp.Event) {},
 		}
 	}
-	fmt.Printf("Serving %s on %s\n", rootPath, *addr)
-	log.Fatal(http.ListenAndServe(*addr, http.HandlerFunc(handle)))
+	fmt.Printf("Serving %s on %s\n", rootPath, addr)
+	log.Fatal(http.ListenAndServe(addr, http.HandlerFunc(handle)))
 }
