@@ -38,7 +38,7 @@ pre.clone {
 `
 )
 
-func Handle(w http.ResponseWriter, r *http.Request) {
+func handle(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Method, r.Host, r.URL.RequestURI())
 	if hasGitDir && strings.HasPrefix(r.URL.RequestURI(), psudoGitPrefix) {
 		gitPath := strings.Replace(r.URL.Path, psudoGitPrefix, realGitPrefix, 1)
@@ -67,7 +67,7 @@ func main() {
 		rootPath = flag.Args()[0]
 	}
 
-	rootPath, _ := filepath.Abs(rootPath)
+	rootPath, _ = filepath.Abs(rootPath)
 
 	stat, err := os.Stat(filepath.Join(rootPath, ".git"))
 	if err == nil && stat.IsDir() {
@@ -89,5 +89,5 @@ func main() {
 		}
 	}
 	fmt.Printf("Serving %s on %s\n", rootPath, *addr)
-	log.Fatal(http.ListenAndServe(*addr, http.HandlerFunc(Handle)))
+	log.Fatal(http.ListenAndServe(*addr, http.HandlerFunc(handle)))
 }
