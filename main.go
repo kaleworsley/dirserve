@@ -60,6 +60,10 @@ func handle(w http.ResponseWriter, r *http.Request) {
 func init() {
 	flag.StringVar(&addr, "addr", "localhost:8080", "address to serve on.")
 	flag.StringVar(&gitPath, "git-path", "/usr/bin/git", "path to git binary.")
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "usage: %s [OPTIONS] [DIRECTORY | .]\n\nOPTIONS\n\n", os.Args[0])
+		flag.PrintDefaults()
+	}
 }
 
 func main() {

@@ -10,7 +10,10 @@ go get -u github.com/kaleworsley/dirserve
 
 ## Usage
 
-    Usage of ./dirserve:
+    usage: dirserve [OPTIONS] [DIRECTORY | .]
+
+    OPTIONS
+
       -addr string
             address to serve on. (default "localhost:8080")
       -git-path string
